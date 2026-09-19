@@ -9,21 +9,21 @@ if [ "${BASH_SOURCE[0]}" = "$0" ]; then
   exit 1
 fi
 set +x
-openinstinct_read_key() {
-  local openinstinct_name="$1"
-  if [ -z "${!openinstinct_name:-}" ]; then
-    read -r -s -p "$openinstinct_name (hidden): " "$openinstinct_name" || return 1
+htn_imessage_read_key() {
+  local htn_imessage_key_name="$1"
+  if [ -z "${!htn_imessage_key_name:-}" ]; then
+    read -r -s -p "$htn_imessage_key_name (hidden): " "$htn_imessage_key_name" || return 1
     printf '\n'
   fi
-  export "$openinstinct_name"
+  export "$htn_imessage_key_name"
 }
-openinstinct_read_key BROWSERBASE_API_KEY || return 1
-openinstinct_read_key AI_GATEWAY_API_KEY || return 1
+htn_imessage_read_key BROWSERBASE_API_KEY || return 1
+htn_imessage_read_key AI_GATEWAY_API_KEY || return 1
 if [ "${1:-}" = "--linq" ]; then
-  openinstinct_read_key LINQ_API_KEY || return 1
-  openinstinct_read_key LINQ_WEBHOOK_SECRET || return 1
+  htn_imessage_read_key LINQ_API_KEY || return 1
+  htn_imessage_read_key LINQ_WEBHOOK_SECRET || return 1
   read -r -p 'Allowed sender phone numbers, comma-separated, e.g. +14165550123: ' LINQ_ALLOWED_SENDERS || return 1
   export LINQ_ALLOWED_SENDERS
 fi
-unset -f openinstinct_read_key
+unset -f htn_imessage_read_key
 printf '%s\n' 'Credentials are available to commands in this shell. Nothing was written to disk.'

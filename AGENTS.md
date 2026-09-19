@@ -1,4 +1,4 @@
-# OpenInstinct Lite: coding-agent quickstart
+# HTN iMessage bot template: coding-agent quickstart
 
 Read README.md, then run `npm ci` and `npm run doctor -- --json`.
 Use `npm run ask -- "<task>"` for a headless run; it returns Eve JSON.
@@ -19,6 +19,17 @@ alternative only before customizing the channel, or after reviewing the change.
 Do not overwrite a configured Linq channel or provision another line by default.
 Keep the user's requested project small. Change `agent/instructions.md` first.
 Do not add databases, a frontend, memory, or schedules unless the project needs them.
+
+The default is Claude Opus 5, a 1M-token context window, and automatic
+compaction at 75%. Keep Eve's default 40M cumulative input budget; that counter
+is separate from context size and is not reset by compaction. A changed budget
+applies to new sessions. Explain the loss of active conversation context before
+resetting an existing user's session.
+
+The official integration is https://eve.dev/integrations/browserbase; it is
+already installed. Keep SETUP_PROMPT.md and the guide's embedded setup prompt
+in sync. Use HACKATHON_DEMO.md for rehearsal and VERIFICATION.md for evidence;
+do not present an HTTP smoke test as proof of a new phone round trip.
 
 Run `npm run check` and `npm run build` after code changes. Live checks require
 credentials: use public demo sites and stop the browser session afterward.

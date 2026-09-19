@@ -1,8 +1,8 @@
-# OpenInstinct Lite
+# HTN iMessage bot template
 
 **Text a task. Let a browser agent do the research.** A small starting point for Hack The North, built with [Eve](https://eve.dev), [Browserbase](https://www.browserbase.com), and [Linq](https://docs.linqapp.com).
 
-[Read the setup guide](https://shrey150.github.io/openinstinct-lite/) · [Use this template](https://github.com/new?template_name=openinstinct-lite&template_owner=shrey150) · [Agent setup prompt](SETUP_PROMPT.md)
+[Read the setup guide](https://shrey150.github.io/htn-imessage-bot-template/) · [Use this template](https://github.com/new?template_name=htn-imessage-bot-template&template_owner=shrey150) · [Agent setup prompt](SETUP_PROMPT.md) · [Hackathon demo](HACKATHON_DEMO.md)
 
 ```text
 Your terminal ──────────────┐
@@ -12,19 +12,19 @@ iMessage / SMS → Linq → Eve agent → Browserbase search / fetch / browser
                            └──── a short answer ◀──┘
 ```
 
-One agent. Edit its instructions to make it yours. No app UI, database, scheduler, or custom webhook server to build. Eve owns the agent loop, conversation history, HTTP routes, and messaging integration. Browserbase's official Eve extension owns the browser lifecycle and tools. The native Linq channel is already included; configure its credentials when you're ready to text the agent.
+One agent. Edit its instructions to make it yours. No app UI, database, scheduler, or custom webhook server to build. Eve owns the agent loop, conversation history, HTTP routes, and messaging integration. [Browserbase's official Eve extension](https://eve.dev/integrations/browserbase) owns the browser lifecycle and tools. The native Linq channel is already included; configure its credentials when you're ready to text the agent.
 
 ## Hosted backend
 
-A reference deployment is available at [openinstinct-lite-demo.vercel.app](https://openinstinct-lite-demo.vercel.app/eve/v1/health). Its health route is public; agent sessions require authentication. A Linq sandbox line is connected and restricted to configured senders. Live iMessage requests, browser tool calls, and delivered replies have been observed; see [verification](VERIFICATION.md) for the checks and remaining limits. Deploy your own instance using step 6.
+A reference deployment is available at [htn-imessage-bot-template.vercel.app](https://htn-imessage-bot-template.vercel.app/eve/v1/health). Its health route is public; agent sessions require authentication. A Linq sandbox line is connected and restricted to configured senders. Live iMessage requests, browser tool calls, and delivered replies have been observed. The upgraded Opus 5 deployment also passed an authenticated browser task and a forced-compaction follow-up; a fresh phone round trip after that upgrade remains to be checked. See [verification](VERIFICATION.md) for evidence. Deploy your own instance using step 6.
 
 ## 1. Get the starter
 
 Install **Node.js 24** and Git. npm ships with Node. macOS, Linux, and Windows through WSL work with the Bash examples below.
 
 ```bash
-git clone https://github.com/shrey150/openinstinct-lite.git
-cd openinstinct-lite
+git clone https://github.com/shrey150/htn-imessage-bot-template.git
+cd htn-imessage-bot-template
 npm ci
 ```
 
@@ -174,17 +174,22 @@ Text your Linq number:
 
 Expect **Example Domain**. Then try your custom task. A real inbound message, a successful Browserbase session, and an actual reply on your phone are the final proof. Complete this test on your own line; a healthy deployment alone does not prove messaging delivery.
 
+## Show it at the hackathon
+
+Use the [five-minute demo script](HACKATHON_DEMO.md): text a live research request, show the Browserbase session or replay, ask a follow-up in the same thread, then show `agent/instructions.md` and the template button. Rehearse the full phone round trip before presenting; use a recorded, clearly labeled run if venue connectivity fails.
+
 ## Repo map
 
 ```text
 agent/
-  agent.ts                 # Model and limits
+  agent.ts                 # Opus 5, 1M context, 75% compaction
   instructions.md          # Your product idea — edit this first
   channels/eve.ts          # Eve's authenticated HTTP channel
   channels/linq.ts         # Ready-to-configure native Linq channel
   extensions/browserbase.ts # Official Browserbase tools
 scripts/                   # Credential check, optional setup, guide preview
 SETUP_PROMPT.md             # Give this to your coding agent
+HACKATHON_DEMO.md           # Five-minute presentation and rehearsal
 VERIFICATION.md             # What was actually tested
 docs/index.html            # Self-contained branded HTML guide
 ```
@@ -203,16 +208,16 @@ The Linq channel ships in the repo and reads its credentials at request time. Mi
 | Browser creation fails | Check Browserbase credentials, credits, and keep-alive support. |
 | Linq responds with 400/401 | Verify the route and signing secret for the direct subscription, or finish the Connect setup. Unsigned requests should be rejected. |
 | No reply on your phone | Check Linq delivery logs, assigned line, subscribed events, deployment protection, and the portable sender allowlist. |
-| “Input-token limit per session” | This is a cumulative usage budget, not the model context window. `Approve` grants another budget window. Budget settings are fixed when a session starts; an older session can retain a previous limit after deployment. |
+| “Input-token limit per session” | This is a cumulative usage budget, not the model context window. `Approve` grants another budget window. Budget settings are fixed when a session starts; an older session can retain a previous limit after deployment. A fresh session adopts the new budget and starts without the old active conversation context. |
 | Browser task returns partial results | Inspect the Eve logs and Browserbase session; check target access and available credits. |
 | `eve invoke` exits 3 | Preserve its JSON and resume the pending input/authorization; this is not a completed task. |
 
 ## Built on official starting points
 
-This project was scaffolded with `npx eve@0.62.0 init`, then configured with the published `@browserbasehq/eve@0.1.0` extension and Eve's native Linq adapter. It is a fresh, smaller starter inspired by the earlier OpenInstinct + Browserbase work, not a copy of the full OpenInstinct app.
+This project was scaffolded with `npx eve@0.62.0 init`, then configured with the published `@browserbasehq/eve@0.1.0` extension and Eve's native Linq adapter. It combines those official starting points into a small, deployable iMessage assistant for Hack the North.
 
 - [Eve quickstart](https://eve.dev/docs/getting-started) and [templates](https://eve.dev/templates)
-- [Browserbase Eve extension](https://github.com/browserbase/stagehand/tree/main/packages/integrations/eve)
+- [Official Browserbase integration for Eve](https://eve.dev/integrations/browserbase) and [extension source](https://github.com/browserbase/stagehand/tree/main/packages/integrations/eve)
 - [Eve native Linq channel](https://eve.dev/docs/channels/linq)
 - [Eve deployment](https://eve.dev/docs/guides/deployment/vercel)
 - [Browserbase templates](https://github.com/browserbase/templates)
