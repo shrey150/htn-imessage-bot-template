@@ -16,7 +16,7 @@ One agent. Edit its instructions to make it yours. No app UI, database, schedule
 
 ## Hosted backend
 
-A reference deployment is available at [openinstinct-lite-demo.vercel.app](https://openinstinct-lite-demo.vercel.app/eve/v1/health). Its health route is public; agent sessions require authentication. It is awaiting Linq account/line configuration, so it is not yet a textable demo. Deploy your own instance using step 6.
+A reference deployment is available at [openinstinct-lite-demo.vercel.app](https://openinstinct-lite-demo.vercel.app/eve/v1/health). Its health route is public; agent sessions require authentication. A Linq sandbox line is connected and restricted to configured senders. The first complete phone test is still pending; see [verification](VERIFICATION.md). Deploy your own instance using step 6.
 
 ## 1. Get the starter
 
@@ -96,6 +96,10 @@ The instructions steer the starter toward research and away from purchases, subm
 
 Choose **one** path. Both use Eve's native `linqChannel`, with the webhook route `/eve/v1/linq`.
 
+### Hack the North sandbox
+
+Start at [Linq's Hack the North signup](https://linqapp.com/s/events/hack-the-north), which offers hackers a free seven-day sandbox with school-email signup. When the dashboard assigns a number, text **Activate** to it from the phone you'll use for testing. Then save your API key in your secret manager and follow **Already have Linq credentials or a hackathon line?** below. The included channel uses that existing line; no second line or connector setup is needed.
+
 ### Guided setup with Vercel Connect (alternative to the included adapter)
 
 ```bash
@@ -166,7 +170,7 @@ Text your Linq number:
 
 > Open example.com in a browser, tell me its heading, and close the browser.
 
-Expect **Example Domain**. Then try your custom task. A real inbound message and an actual reply on your phone are the final proof of Linq delivery. This repository was prepared without a live Linq account; that last phone test must be completed on your line.
+Expect **Example Domain**. Then try your custom task. A real inbound message, a successful Browserbase session, and an actual reply on your phone are the final proof. Complete this test on your own line; a healthy deployment alone does not prove messaging delivery.
 
 ## Repo map
 

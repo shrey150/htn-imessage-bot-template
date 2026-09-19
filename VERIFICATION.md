@@ -15,13 +15,16 @@ Tested on Node.js 24.15.0 with Eve 0.62.0 and the published Browserbase Eve exte
 | Unsigned, tampered, and expired Linq webhook requests | All return 401 | Native Linq signature enforcement using synthetic signing material |
 | Valid signed synthetic event | Returns 200 `OK`; sender is outside the portable allowlist | Event verification and channel routing; not real Linq delivery |
 | Public guide at 1440 × 1000 and 390 × 844 | Rendered screenshots; no horizontal overflow; copy prompt, setup tabs, mobile navigation, and checklist persistence pass | Published guide layout and controls |
+| Linq sandbox activation and API access | User sent `Activate`; Linq reports one assigned, healthy line; phone-number API returns 200 | The provisioned sandbox and its API key work; activation arrived through iMessage |
+| Linq webhook configuration | Active subscription filtered to the assigned line; API key, signing secret, and sender allowlist stored in encrypted Vercel Production variables | The deployed native channel has its live connection configuration |
+| Deployment after Linq configuration | Health returns `200 ready`; unsigned `/eve/v1/linq` request returns `401` | The configured deployment is ready and rejects unauthenticated webhook requests |
 
 Early local and hosted tests exposed two setup traps: ambient provider keys can override the intended Browserbase Gateway path, and an agent can return a correct-looking answer after a browser tool falls back. The final smoke launcher passes only the documented credentials, uses the extension's supported default browser model, emits clean JSON, and returns failure if it detects a tool error.
 
 ## Not yet verified
 
-- A real inbound Linq iMessage/SMS and an actual reply delivered to a phone. No Linq API key or provisioned line was available for this build.
+- The complete phone flow: a new inbound iMessage triggers this deployed Eve agent, successfully runs Browserbase, and returns an actual reply to the phone. The configured sender has been asked to send the browser smoke-test prompt.
 - Linq account/number provisioning through Vercel Connect.
-- Real phone delivery through the deployed backend. The reference backend is deployed at https://openinstinct-lite-demo.vercel.app; Linq credentials are not configured.
+- SMS/RCS delivery; the sandbox activation used iMessage.
 
 The synthetic webhook tests use the real Eve HTTP server and native Linq adapter, but do not call the Linq API or claim to simulate phone delivery. The research-only prompt is behavior guidance, not a security sandbox. Transitive package dependencies retain their upstream maintenance and security constraints; this report is a functional verification, not a dependency security audit.
