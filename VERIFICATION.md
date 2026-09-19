@@ -1,6 +1,6 @@
 # Verification — September 19, 2026
 
-Tested on Node.js 24.15.0 with Eve 0.62.0 and the published Browserbase Eve extension 0.1.0. Eve uses `anthropic/claude-sonnet-4.6`; Stagehand uses `openai/gpt-5.4-mini` through Browserbase Model Gateway.
+Tested on Node.js 24.15.0 with Eve 0.62.0 and the published Browserbase Eve extension 0.1.0. The agent now uses `anthropic/claude-opus-5` with 1M context and automatic compaction at 75%; the original hosted checks used Sonnet 4.6. Stagehand uses `openai/gpt-5.4-mini` through Browserbase Model Gateway.
 
 | Check | Observed result | What it proves |
 | --- | --- | --- |
@@ -18,12 +18,16 @@ Tested on Node.js 24.15.0 with Eve 0.62.0 and the published Browserbase Eve exte
 | Linq sandbox activation and API access | User sent `Activate`; Linq reports one assigned, healthy line; phone-number API returns 200 | The provisioned sandbox and its API key work; activation arrived through iMessage |
 | Linq webhook configuration | Active subscription filtered to the assigned line; API key, signing secret, and sender allowlist stored in encrypted Vercel Production variables | The deployed native channel has its live connection configuration |
 | Deployment after Linq configuration | Health returns `200 ready`; unsigned `/eve/v1/linq` request returns `401` | The configured deployment is ready and rejects unauthenticated webhook requests |
+| Live iMessage conversation | Linq received user messages; Eve ran Browserbase tools; Linq reports assistant replies as delivered | Real messaging transport and agent tool execution, including the budget warning described below |
+| Opus 5 local browser smoke | Returned `Example Domain` after a real browser task; smoke exit 0, with no recovered tool errors | The upgraded model can use the published Browserbase extension with the documented credentials |
 
 Early local and hosted tests exposed two setup traps: ambient provider keys can override the intended Browserbase Gateway path, and an agent can return a correct-looking answer after a browser tool falls back. The final smoke launcher passes only the documented credentials, uses the extension's supported default browser model, emits clean JSON, and returns failure if it detects a tool error.
 
+The first live phone conversation also exposed an overly small authored session budget: 200K cumulative input tokens, separate from the model's context window. Repeated tool/model calls exhausted it while individual prompts remained below 60K tokens. The starter now uses Eve's default 40M cumulative input budget and no custom cumulative output cap. Model context is explicitly 1M, and automatic compaction starts at 75%. Existing sessions retain their original usage-budget settings; a fresh session is required to adopt the changed budget. Automatic compaction at 750K has not been exercised by a full-size context test.
+
 ## Not yet verified
 
-- The complete phone flow: a new inbound iMessage triggers this deployed Eve agent, successfully runs Browserbase, and returns an actual reply to the phone. The configured sender has been asked to send the browser smoke-test prompt.
+- A new phone browser-task round trip after the Opus 5 and budget update.
 - Linq account/number provisioning through Vercel Connect.
 - SMS/RCS delivery; the sandbox activation used iMessage.
 

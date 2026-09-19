@@ -16,7 +16,7 @@ One agent. Edit its instructions to make it yours. No app UI, database, schedule
 
 ## Hosted backend
 
-A reference deployment is available at [openinstinct-lite-demo.vercel.app](https://openinstinct-lite-demo.vercel.app/eve/v1/health). Its health route is public; agent sessions require authentication. A Linq sandbox line is connected and restricted to configured senders. The first complete phone test is still pending; see [verification](VERIFICATION.md). Deploy your own instance using step 6.
+A reference deployment is available at [openinstinct-lite-demo.vercel.app](https://openinstinct-lite-demo.vercel.app/eve/v1/health). Its health route is public; agent sessions require authentication. A Linq sandbox line is connected and restricted to configured senders. Live iMessage requests, browser tool calls, and delivered replies have been observed; see [verification](VERIFICATION.md) for the checks and remaining limits. Deploy your own instance using step 6.
 
 ## 1. Get the starter
 
@@ -89,6 +89,8 @@ Edit **`agent/instructions.md`**. That's the main customization surface. Pick on
 - **Paper companion:** open an article or project page and explain it in three bullets.
 
 Change the reasoning model in `agent/agent.ts`; change the browser's model or timeout in `agent/extensions/browserbase.ts`. These are separate model calls. Optional Eve defaults such as shell access are disabled; this agent gets its tools from Browserbase.
+
+The main agent uses **Claude Opus 5 with a 1M-token context window**. Eve automatically compacts older history at 75% of that window. Its separate, default session budget allows 40M cumulative input tokens across model calls. Repeatedly reading the same history counts toward that budget, including cached input. Compaction reduces future context size; it does not reset accumulated usage.
 
 The instructions steer the starter toward research and away from purchases, submissions, and account changes. They are behavior guidance, not an enforced permissions system. Add explicit tool approval policies before building features that commit actions for users. See [Eve tool approvals](https://eve.dev/docs/tools/human-in-the-loop).
 
@@ -201,6 +203,7 @@ The Linq channel ships in the repo and reads its credentials at request time. Mi
 | Browser creation fails | Check Browserbase credentials, credits, and keep-alive support. |
 | Linq responds with 400/401 | Verify the route and signing secret for the direct subscription, or finish the Connect setup. Unsigned requests should be rejected. |
 | No reply on your phone | Check Linq delivery logs, assigned line, subscribed events, deployment protection, and the portable sender allowlist. |
+| “Input-token limit per session” | This is a cumulative usage budget, not the model context window. `Approve` grants another budget window. Budget settings are fixed when a session starts; an older session can retain a previous limit after deployment. |
 | Browser task returns partial results | Inspect the Eve logs and Browserbase session; check target access and available credits. |
 | `eve invoke` exits 3 | Preserve its JSON and resume the pending input/authorization; this is not a completed task. |
 
