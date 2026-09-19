@@ -1,0 +1,37 @@
+{
+  "name": "openinstinct-lite",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Text a browser agent. A Linq + Eve + Browserbase starter for Hack The North.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "eve dev",
+    "ask": "eve invoke",
+    "doctor": "node scripts/doctor.mjs",
+    "smoke": "eve invoke \"Use Browserbase to create a browser session, open https://example.com, extract the page heading, and stop the browser session. Return the heading and URL.\"",
+    "linq": "eve add channel/linq --overwrite",
+    "build": "eve build",
+    "start": "eve start",
+    "deploy": "eve deploy",
+    "typecheck": "tsc",
+    "check": "npm run typecheck && node --test tests/setup.test.mjs",
+    "guide": "node scripts/guide.mjs",
+    "test:server": "node --test tests/linq-http.test.mjs"
+  },
+  "dependencies": {
+    "@browserbasehq/eve": "0.1.0",
+    "@vercel/connect": "2.2.0",
+    "ai": "7.0.105",
+    "eve": "0.62.0",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.13",
+    "typescript": "7.0.2",
+    "vercel": "58.5.1"
+  },
+  "engines": {
+    "node": "24.x"
+  }
+}
