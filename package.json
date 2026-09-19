@@ -7,15 +7,15 @@
   "type": "module",
   "scripts": {
     "dev": "eve dev",
-    "ask": "eve invoke",
+    "ask": "node scripts/ask.mjs",
     "doctor": "node scripts/doctor.mjs",
-    "smoke": "eve invoke \"Use Browserbase to create a browser session, open https://example.com, extract the page heading, and stop the browser session. Return the heading and URL.\"",
+    "smoke": "node scripts/ask.mjs --smoke",
     "linq": "eve add channel/linq --overwrite",
     "build": "eve build",
     "start": "eve start",
     "deploy": "eve deploy",
     "typecheck": "tsc",
-    "check": "npm run typecheck && node --test tests/setup.test.mjs",
+    "check": "npm run typecheck && node --test tests/setup.test.mjs tests/ask.test.mjs",
     "guide": "node scripts/guide.mjs",
     "test:server": "node --test tests/linq-http.test.mjs"
   },

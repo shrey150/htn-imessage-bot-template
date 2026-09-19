@@ -11,7 +11,7 @@ Run npm run check and npm run build. Then run npm run smoke with the real
 Browserbase and AI Gateway credentials. Verify the result includes Example
 Domain and that the browser session is stopped. Use npm run --silent ask --
 "<task>" for headless invocations. Preserve Eve's JSON; an exit code of 3 means
-input or authorization is pending, and npx eve invoke --resume takes the previous
+input or authorization is pending, and npm run --silent ask -- --resume takes the previous
 result on stdin. Report observed results rather than assuming a zero exit code
 means the requested web task succeeded.
 

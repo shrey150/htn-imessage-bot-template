@@ -59,7 +59,7 @@ Enter keys only in the hidden terminal prompts. They stay in that shell, are not
 npm run smoke
 ```
 
-This asks the real Eve agent to create a Browserbase session, navigate to `https://example.com`, extract the heading, and stop the browser. A successful response contains **Example Domain** and the source URL. Inspect the session in your [Browserbase dashboard](https://www.browserbase.com/sessions).
+This smoke test passes only the two documented API credentials to Eve, so unrelated provider keys on your laptop cannot change its model routing. It also fails if a tool error is recovered through a fallback. It asks the real Eve agent to create a Browserbase session, navigate to `https://example.com`, extract the heading, and stop the browser. A successful response contains **Example Domain** and the source URL. Inspect the session in your [Browserbase dashboard](https://www.browserbase.com/sessions).
 
 Chat interactively:
 
@@ -73,10 +73,10 @@ Or let another coding agent run a task without a TUI:
 npm run --silent ask -- "Open https://news.ycombinator.com in a browser and return the first three story titles with links. Close the browser."
 ```
 
-Eve returns JSON. Exit code `0` means the invocation completed; `1` means failure; `3` means it paused for input or authorization. A completed turn can still describe a failed task, so inspect its answer. Save the result to a temporary, private file outside the repo if you want to continue the conversation:
+The small headless wrapper emits Eve's final JSON and keeps SDK diagnostic logs, including signed browser URLs, out of stdout. Exit code `0` means the invocation completed; `1` means failure; `3` means it paused for input or authorization. A completed turn can still describe a failed task, so inspect its answer. Save the result to a temporary, private file outside the repo if you want to continue the conversation:
 
 ```bash
-npx eve invoke --resume "Now summarize those in one sentence" < /path/to/previous-result.json
+npm run --silent ask -- --resume "Now summarize those in one sentence" < /path/to/previous-result.json
 ```
 
 ## 4. Make it your hack
@@ -192,6 +192,7 @@ The Linq channel ships in the repo and reads its credentials at request time. Mi
 | Symptom | Next step |
 | --- | --- |
 | `doctor` reports a missing key | Inject it into the same shell, or configure the host's encrypted environment; never print it to debug. |
+| A browser task picks up another model-provider key | The official extension can detect ambient provider keys. `npm run smoke` isolates its environment; keep only the documented keys when reproducing that path. |
 | Model authentication fails | Confirm AI Gateway access to the model in `agent/agent.ts`; the Browserbase key does not pay for Eve's model. |
 | Browser creation fails | Check Browserbase credentials, credits, and keep-alive support. |
 | Linq responds with 400/401 | Verify the route and signing secret for the direct subscription, or finish the Connect setup. Unsigned requests should be rejected. |

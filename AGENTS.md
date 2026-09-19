@@ -3,7 +3,7 @@
 Read README.md, then run `npm ci` and `npm run doctor -- --json`.
 Use `npm run ask -- "<task>"` for a headless run; it returns Eve JSON.
 Exit 0 is a completed invocation, 1 is failure, 3 means input or authorization
-is pending. Preserve the JSON and resume with `npx eve invoke --resume` via stdin.
+is pending. Preserve the JSON and resume with `npm run --silent ask -- --resume` via stdin.
 Do not treat a paused invocation as success.
 
 Use managed environment variables for secrets. Never print credentials, put
