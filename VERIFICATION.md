@@ -9,10 +9,12 @@ Tested on Node.js 24.15.0 with Eve 0.62.0 and the published Browserbase Eve exte
 | `npm run build` | Production output generated in `.output` | Eve compiles the agent, Browserbase extension, and native Linq channel |
 | `npm run smoke` | `create_session` → `navigate` → `extract` → `stop_session`; heading `Example Domain` | Real Eve + Browserbase + Stagehand extraction, with live model calls |
 | Browserbase session API after the smoke test | `COMPLETED` | Browser cleanup was verified against the service, not only the agent's reply |
+| Hosted health and auth | Health returns `200 ready`; anonymous session creation returns `401` | Vercel deployment is serving requests with production auth enabled |
+| Authenticated hosted `eve invoke` browser task | Returned `Example Domain` from `https://example.com` | The deployed Eve agent completes the browser task through Browserbase |
 | `npm run test:server` | 5 HTTP assertions pass (6 tests including the parent test) | The compiled portable app serves health, rejects anonymous HTTP session creation, verifies Linq webhook signatures, and accepts a valid signed event from an ignored sender |
 | Unsigned, tampered, and expired Linq webhook requests | All return 401 | Native Linq signature enforcement using synthetic signing material |
 | Valid signed synthetic event | Returns 200 `OK`; sender is outside the portable allowlist | Event verification and channel routing; not real Linq delivery |
-| Guide at 1440 × 1000 and 390 × 844 | Rendered screenshots; mobile has no horizontal overflow | Desktop and mobile guide layout |
+| Public guide at 1440 × 1000 and 390 × 844 | Rendered screenshots; no horizontal overflow; copy prompt, setup tabs, mobile navigation, and checklist persistence pass | Published guide layout and controls |
 
 The initial OpenAI browser-model attempt hit a model-credit error. The final configured Gemini browser model passed the same real extraction task without tool errors.
 
@@ -20,6 +22,6 @@ The initial OpenAI browser-model attempt hit a model-credit error. The final con
 
 - A real inbound Linq iMessage/SMS and an actual reply delivered to a phone. No Linq API key or provisioned line was available for this build.
 - Linq account/number provisioning through Vercel Connect.
-- Production execution after a Vercel deployment. The local production build and HTTP contract checks pass; deployments need account environment configuration.
+- Real phone delivery through the deployed backend. The reference backend is deployed at https://openinstinct-lite-demo.vercel.app; Linq credentials are not configured.
 
 The synthetic webhook tests use the real Eve HTTP server and native Linq adapter, but do not call the Linq API or claim to simulate phone delivery. The research-only prompt is behavior guidance, not a security sandbox. Transitive package dependencies retain their upstream maintenance and security constraints; this report is a functional verification, not a dependency security audit.

@@ -14,6 +14,10 @@ iMessage / SMS → Linq → Eve agent → Browserbase search / fetch / browser
 
 One agent. Edit its instructions to make it yours. No app UI, database, scheduler, or custom webhook server to build. Eve owns the agent loop, conversation history, HTTP routes, and messaging integration. Browserbase's official Eve extension owns the browser lifecycle and tools. The native Linq channel is already included; configure its credentials when you're ready to text the agent.
 
+## Hosted backend
+
+A reference deployment is available at [openinstinct-lite-demo.vercel.app](https://openinstinct-lite-demo.vercel.app/eve/v1/health). Its health route is public; agent sessions require authentication. It is awaiting Linq account/line configuration, so it is not yet a textable demo. Deploy your own instance using step 6.
+
 ## 1. Get the starter
 
 Install **Node.js 24** and Git. npm ships with Node. macOS, Linux, and Windows through WSL work with the Bash examples below.
@@ -106,6 +110,8 @@ For coding agents, use the native noninteractive installer:
 ```bash
 npx eve add channel/linq --non-interactive --overwrite
 ```
+
+If a noninteractive Vercel link reports a missing scope, run `npx vercel link --project YOUR-PROJECT --scope YOUR-TEAM --yes`, then retry Eve from the linked directory. The Vercel CLI is pinned in this repo.
 
 Exit `2` means setup needs input or a prerequisite. Read the final NDJSON event and follow `next.command`. Supply only non-secret answers with `--answer`. Do not retry the same unresolved command in a loop. The guided portable option may write local env files; use the checked-in portable path below when your credentials are already managed externally.
 
