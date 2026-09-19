@@ -22,11 +22,11 @@ Show one complete loop: **text → real browser work → reply with sources**. K
 
 First text:
 
-> Open https://news.ycombinator.com in a browser. Return the first three story titles with links, then close the browser.
+> Open https://news.ycombinator.com in a browser. Return the first three story titles with their links, then close the browser.
 
 Follow-up:
 
-> Which of those three stories is most useful for a student building a hackathon project, and why? Keep it to three sentences and include the link.
+> Which of those three looks most useful to a student building an AI hackathon project? Pick one and explain in two sentences, using only the titles you just saw.
 
 The story titles change. Judge the demo by the live page, source links, browser evidence, and delivered reply; do not memorize expected titles.
 
